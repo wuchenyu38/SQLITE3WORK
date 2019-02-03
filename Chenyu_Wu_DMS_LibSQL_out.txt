@@ -1,0 +1,100 @@
+PRAGMA foreign_keys = ON;
+DROP TABLE IF EXISTS CheckOut;
+DROP TABLE IF EXISTS LibBook;
+DROP TABLE IF EXISTS Student;
+CREATE TABLE LibBook (
+   lbCallNum	CHAR(2)		CONSTRAINT LibBook_lbCallNum_pk PRIMARY KEY,
+   lbTitle	VARCHAR2(35)	NOT NULL,
+   bkAuthor  VARCHAR2(35)   NOT NULL CHECK(bkAuthor=NOT NULL),
+   bkPublication Varchar2(35) NOT NULL
+  );
+CREATE TABLE Student (
+   stdID		CHAR(3)		CONSTRAINT student_stdID_pk PRIMARY KEY,
+   stdLastName	VARCHAR2(25)	NOT NULL,
+   stdFirstName   VARCHAR2(25)    NOT NULL
+  );
+CREATE TABLE CheckOut (
+   coID         INTEGER PRIMARY KEY AUTOINCREMENT,
+   stdID		CHAR(3)		CONSTRAINT CheckOut_stdID_fk REFERENCES Student(stdID),
+   lbCallNum	CHAR(2)		CONSTRAINT CheckOut_lbCallNum_fk REFERENCES LibBook(lbCallNum),
+   bkIssueDate DATE           NOT NULL,
+   coDueDate	DATE		NOT NULL,
+   coIsReturned	CHAR(1)		CONSTRAINT CheckOut_coIsReturned_cc CHECK (
+				(coIsReturned='N') OR (coIsReturned='Y') OR (coIsReturned=NULL)),
+/* Remove the last check of Null above and rerun to see*/				
+   coReturnDate  Date,
+   coFine	NUMBER(7,2)	DEFAULT NULL
+   
+   
+  );
+INSERT INTO LibBook	VALUES ('a1', 'Software Engineering', 'Roger Pressman', 'Mc Graw Hill');
+INSERT INTO LibBook	VALUES ('a2', 'Database Management', 'Michael Gorman', 'Penguin');
+INSERT INTO LibBook VALUES ('b1', 'Attitudes and Behavior', 'Mason Gross', 'Wiley');
+INSERT INTO LibBook	VALUES ('b2', 'Fifth Discipline', 'Jane Nelsen', 'Davis');
+INSERT INTO LibBook	VALUES ('c1', 'Organizations', 'Roger Martin', 'Alphagraphics');
+INSERT INTO LibBook	VALUES ('c2', 'Psychology', 'Dan ariely', 'Harper Collins');
+INSERT INTO LibBook	VALUES ('c3', 'Contract Law', 'Ewan Mckendrick', 'Wiley');
+INSERT INTO LibBook	VALUES ('d1', 'Robot Ethics 2.0: From Autonomous Cars to Artificial Intelligence', 'Patrick Lin', 'Oxford University Press');
+INSERT INTO LibBook	VALUES ('d2', 'Artificial Intelligence', 'Alain Bonnet', 'Prentice-Hall International');
+INSERT INTO LibBook	VALUES ('d3', 'The Foundations of Artificial Intelligence: A Sourcebook', 'Yorick Wilks', 'Cambridge University Press');
+INSERT INTO LibBook	VALUES ('a3', 'Grid and Cloud Database Management','Sandro Fiore','Springer');
+INSERT INTO Student	VALUES ('111', 'Gibson', 'Jack');
+INSERT INTO Student	VALUES ('222', 'Henderson', 'Mark');
+INSERT INTO Student	VALUES ('333', 'Jones', 'Andrew');
+INSERT INTO Student	VALUES ('444', 'Jackson', 'Tom');
+INSERT INTO Student	VALUES ('555', 'Feedman', 'Mason');
+INSERT INTO Student	VALUES ('666', 'King', 'Tyson');
+INSERT INTO Student	VALUES ('777', 'Bentley', 'Peter');
+INSERT INTO Student	VALUES ('888', 'Jefferson', 'Bob');
+INSERT INTO CheckOut (stdID, lbCallNum, bkIssueDate, coDueDate, coIsReturned, coReturnDate, coFine) VALUES ('111', 'a1', DATE('2013-09-01'), DATE('2013-10-01'), 'N', null , null);
+INSERT INTO CheckOut (stdID, lbCallNum, bkIssueDate, coDueDate, coIsReturned, coReturnDate, coFine) VALUES ('111', 'b2', DATE('2013-08-28'), DATE('2013-09-28'), 'N', null , null);
+INSERT INTO CheckOut (stdID, lbCallNum, bkIssueDate, coDueDate, coIsReturned, coReturnDate, coFine) VALUES ('222', 'b2', DATE('2013-07-23'), DATE('2013-08-23'), 'Y', DATE('2013-08-25'), 2.50);
+INSERT INTO CheckOut (stdID, lbCallNum, bkIssueDate, coDueDate, coIsReturned, coReturnDate, coFine) VALUES ('444', 'b2', DATE('2013-08-03'), DATE('2013-09-03'), 'Y', DATE('2013-09-04'), 1.20);
+INSERT INTO CheckOut (stdID, lbCallNum, bkIssueDate, coDueDate, coIsReturned, coReturnDate, coFine) VALUES ('444', 'c2', DATE('2013-08-10'), DATE('2013-09-10'), 'Y', DATE('2013-09-15'), 3.00);
+INSERT INTO CheckOut (stdID, lbCallNum, bkIssueDate, coDueDate, coIsReturned, coReturnDate, coFine) VALUES ('444', 'c3', DATE('2013-09-01'), DATE('2013-10-01'), 'Y', DATE('2013-09-29'), null);
+INSERT INTO CheckOut (stdID, lbCallNum, bkIssueDate, coDueDate, coIsReturned, coReturnDate, coFine) VALUES ('555', 'c3', DATE('2013-09-25'), DATE('2013-10-25'), 'N', null , null);
+INSERT INTO CheckOut (stdID, lbCallNum, bkIssueDate, coDueDate, coIsReturned, coReturnDate, coFine) VALUES ('777', 'c3', DATE('2013-08-10'), DATE('2013-09-10'), 'Y', DATE('2013-09-11'), 1.00);
+INSERT INTO CheckOut (stdID, lbCallNum, bkIssueDate, coDueDate, coIsReturned, coReturnDate, coFine) VALUES ('777', 'a2', DATE('2013-07-25'), DATE('2013-08-25'), 'N', null , null);
+INSERT INTO CheckOut (stdID, lbCallNum, bkIssueDate, coDueDate, coIsReturned, coReturnDate, coFine) VALUES ('777', 'b2', DATE('2013-08-23'), DATE('2013-09-23'), 'Y', DATE('2013-09-22'), null);
+INSERT INTO CheckOut (stdID, lbCallNum, bkIssueDate, coDueDate, coIsReturned, coReturnDate, coFine) VALUES ('777', 'c1', DATE('2013-08-25'), DATE('2013-09-25'), 'Y', DATE('2013-09-27'), 1.50);
+INSERT INTO CheckOut (stdID, lbCallNum, bkIssueDate, coDueDate, coIsReturned, coReturnDate, coFine) VALUES ('888', 'b2', DATE('2013-09-01'), DATE('2013-10-01'), '', null , null);
+SELECT * FROM LibBook;
+lbCallNum   lbTitle               bkAuthor        bkPublication
+----------  --------------------  --------------  -------------
+a1          Software Engineering  Roger Pressman  Mc Graw Hill 
+a2          Database Management   Michael Gorman  Penguin      
+b1          Attitudes and Behavi  Mason Gross     Wiley        
+b2          Fifth Discipline      Jane Nelsen     Davis        
+c1          Organizations         Roger Martin    Alphagraphics
+c2          Psychology            Dan ariely      Harper Collin
+c3          Contract Law          Ewan Mckendric  Wiley        
+d1          Robot Ethics 2.0: Fr  Patrick Lin     Oxford Univer
+d2          Artificial Intellige  Alain Bonnet    Prentice-Hall
+d3          The Foundations of A  Yorick Wilks    Cambridge Uni
+a3          Grid and Cloud Datab  Sandro Fiore    Springer     
+SELECT * FROM Student;
+stdID       stdLastName  stdFirstName
+----------  -----------  ------------
+111         Gibson       Jack        
+222         Henderson    Mark        
+333         Jones        Andrew      
+444         Jackson      Tom         
+555         Feedman      Mason       
+666         King         Tyson       
+777         Bentley      Peter       
+888         Jefferson    Bob         
+SELECT * FROM Checkout;
+coID        stdID       lbCallNum   bkIssueDate  coDueDate   coIsReturned  coReturnDate  coFine    
+----------  ----------  ----------  -----------  ----------  ------------  ------------  ----------
+1           111         a1          2013-09-01   2013-10-01  N                                     
+2           111         b2          2013-08-28   2013-09-28  N                                     
+3           222         b2          2013-07-23   2013-08-23  Y             2013-08-25    2.5       
+4           444         b2          2013-08-03   2013-09-03  Y             2013-09-04    1.2       
+5           444         c2          2013-08-10   2013-09-10  Y             2013-09-15    3         
+6           444         c3          2013-09-01   2013-10-01  Y             2013-09-29              
+7           555         c3          2013-09-25   2013-10-25  N                                     
+8           777         c3          2013-08-10   2013-09-10  Y             2013-09-11    1         
+9           777         a2          2013-07-25   2013-08-25  N                                     
+10          777         b2          2013-08-23   2013-09-23  Y             2013-09-22              
+11          777         c1          2013-08-25   2013-09-25  Y             2013-09-27    1.5       
+12          888         b2          2013-09-01   2013-10-01                                        
