@@ -17,7 +17,7 @@
 .print "Solution For Q1"
 .print ""
 
-Select  LGEMPLOYEE.Emp_Num, Emp_Fname, Emp_Lname, Emp_HireDate, Emp_Title, COUNT(LGEMPLOYEE.Emp_Num) AS Total_Num_Orders, SUM(LGINVOICE.Inv_Total) AS Total_Sale_Vol from LGINVOICE INNER JOIN LGEMPLOYEE ON LGINVOICE.Emp_Num = LGEMPLOYEE.Emp_Num group by LGEMPLOYEE.Emp_Num order by LGEMPLOYEE.Emp_Title, Total_Sale_Vol DESC;
+Select  LGEMPLOYEE.Emp_Num, Emp_Fname, Emp_Lname, Emp_HireDate, strftime('%Y',Emp_HireDate) as Year, Emp_Title, COUNT(LGEMPLOYEE.Emp_Num) AS Total_Num_Orders, SUM(LGINVOICE.Inv_Total) AS Total_Sale_Vol from LGINVOICE INNER JOIN LGEMPLOYEE ON LGINVOICE.Emp_Num = LGEMPLOYEE.Emp_Num group by LGEMPLOYEE.Emp_Num order by LGEMPLOYEE.Emp_Title, Total_Sale_Vol DESC;
 
 .print "Problems 2: "
 .print "Generate a tabular report to facilitate quarterly market performance of LG Sales. The query result should display total sales ($$) for each quarter of every year. The results should be grouped by state and year of sales."
